@@ -11,8 +11,12 @@ namespace NotAQuest
     {   
         public ExitState state;
         public Player player = null;
-        List<Episode> Episodes = new List<Episode>(10);
+        List<Episode> Episodes = new List<Episode>(1);        
         Episode currentEpisode = null;
+
+        enum Steps { Girl, BossCall, MashaCall };
+
+        Dictionary<Steps, bool> solutions = new Dictionary<Steps, bool>();
 
         public Game()
         {           
@@ -67,6 +71,29 @@ namespace NotAQuest
             IO.WriteDebug(string.Format("Удаляем реплику `{0}` из диалога `{1}`", replyId, dialogId));
             Dialog d = currentEpisode.GetDialog(dialogId);
             d.Replies.Remove(d.GetReply(replyId));
-        }        
+        }
+
+        public void SetSolution(string step, string solution)
+        {
+            Steps parsedStep = (Steps) Enum.Parse(typeof(Steps), step);
+            if (!Enum.IsDefined(typeof(Steps), parsedStep))
+                throw new Exception(string.Format("Не найдено шага `{0}`", step));
+
+            bool parsedSolution;
+            if (!Boolean.TryParse(solution, out parsedSolution))
+                throw new Exception(string.Format("Невозможно распознать решение {1} для шага {0}", step, solution));
+
+            solutions[parsedStep] = parsedSolution;                          
+        }
+
+        public void ResetAll()
+        { 
+            // Solutions Clear
+            solutions.Clear();
+
+            // Dialogs removes/adds clear
+            // Such a hack
+            EpisodeLoader.ResetEpisode(Episodes[0], EpisodeLoader.FILE_EPISODE1);
+        }
     }
 }

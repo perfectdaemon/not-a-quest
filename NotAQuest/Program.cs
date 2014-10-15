@@ -10,6 +10,7 @@ namespace NotAQuest
     {      
         static void Main(string[] args)
         {
+            Console.SetWindowSize(Console.LargestWindowWidth / 2, Console.LargestWindowHeight / 2);
             if (args.Length > 0)
                 IO.AllowDebugOutput = args[0] == "-debug";
 
