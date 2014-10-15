@@ -419,6 +419,7 @@ namespace NotAQuestEditor
         {
             Process process = new Process();
             process.StartInfo.FileName = "NotAQuest.exe";
+            process.StartInfo.Arguments = "-debug";
             process.Start();
         }
 
